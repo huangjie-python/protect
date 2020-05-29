@@ -1,0 +1,244 @@
+{% extends 'index.html' %}
+{% block name %}
+	<!-- //navigation -->
+	<!-- banner-2 -->
+	<div class="page-head_agile_info_w3l">
+
+	</div>
+	<!-- //banner-2 -->
+	<!-- page -->
+	<div class="services-breadcrumb">
+		<div class="agile_inner_breadcrumb">
+			<div class="container">
+				<ul class="w3_short">
+					<li>
+						<a href="index.html">Home</a>
+						<i>|</i>
+					</li>
+					<li>Checkout</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- //page -->
+	<!-- checkout page -->
+	<div class="privacy">
+		<div class="container">
+			<!-- tittle heading -->
+			<h3 class="tittle-w3l">Checkout
+				<span class="heading-style">
+					<i></i>
+					<i></i>
+					<i></i>
+				</span>
+			</h3>
+			<!-- //tittle heading -->
+			<div class="checkout-right">
+				<h4>Your shopping cart contains:
+					<span>{{ a.l }} Products</span>
+				</h4>
+				<div class="table-responsive">
+					<table class="timetable_sub">
+						<thead>
+							<tr>
+								<th>SL No.</th>
+								<th>Product</th>
+								<th>Quality</th>
+								<th>Product Name</th>
+
+								<th>Price</th>
+								<th>Remove</th>
+							</tr>
+						</thead>
+						<tbody>
+                            {% for i in range(a.l) %}
+							<tr  id="{{ a.gcar[i].gid }}">
+								<td class="invert">{{ i }}</td>
+								<td class="invert">
+									<a href="/single?gid={{ a.gcar[i].gid }}">
+										<img src="/{{ a.gcar[i].gtp }}" width="70px" height="70px">
+									</a>
+								</td>
+								<td class="invert">
+									<div class="quantity">
+										<div class="quantity-select" id="{{ a.gcar[i].gid }}">
+											<div class="entry value-minus">&nbsp;</div>
+											<div class="entry value">
+												<span>{{ a.goodsnum[i] }}</span>
+											</div>
+											<div class="entry value-plus active" >&nbsp;</div>
+										</div>
+									</div>
+								</td>
+								<td class="invert">{{ a.gcar[i].gname }}</td>
+								<td class="invert">￥{{ a.gcar[i].gjg }}</td>
+								<td class="invert">
+									<div class="rem">
+                                        <button onclick="xichu('{{ a.gcar[i].gid }}')">×</button>
+									</div>
+								</td>
+							</tr>
+                             {% endfor %}
+                    <form action="/payment_test" method="post" class="creditly-card-form agileinfo_form">
+                        <thead>
+							<tr>
+								<th>总计金额为</th>
+                                <th>￥<input value="{{ a.money }}" id="money" name="money" readonly style="background-color:#000000"></th>
+							</tr>
+						</thead>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="checkout-left">
+				<div class="address_form_agile">
+					<h4>Add a new Details</h4>
+						<div class="creditly-wrapper wthree, w3_agileits_wrapper">
+							<div class="information-wrapper">
+								<div class="first-row">
+									<div class="controls">
+										<input class="billing-address-name" type="text" name="ddz" placeholder="输入你的收货地址" required="">
+									</div>
+								</div>
+							</div>
+						</div>
+                        <div class="checkout-right-basket">
+                                <input type="submit">
+					    </div>
+					</form>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+	<!-- //checkout page -->
+	<!-- newsletter -->
+{% endblock %}
+	<!-- //copyright -->
+{% block name1 %}
+
+
+	<!-- popup modal (for signin & signup)-->
+	<script src="/static/js/jquery.magnific-popup.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('.popup-with-zoom-anim').magnificPopup({
+				type: 'inline',
+				fixedContentPos: false,
+				fixedBgPos: true,
+				overflowY: 'auto',
+				closeBtnInside: true,
+				preloader: false,
+				midClick: true,
+				removalDelay: 300,
+				mainClass: 'my-mfp-zoom-in'
+			});
+
+		});
+	</script>
+	<!-- Large modal -->
+	<!-- <script>
+		$('#').modal('show');
+	</script> -->
+	<!-- //popup modal (for signin & signup)-->
+
+
+
+	<!--quantity-->
+	<script>
+		$('.value-plus').on('click', function () {
+                var divUpd = $(this).parent().find('.value'),
+				    newVal = parseInt(divUpd.text(), 10) + 1;
+			    if (newVal >= 1) divUpd.text(newVal);
+                var gid = $(this).parent().attr('id');
+			    $.ajax({
+                    type:'post',
+                    url:'/gxcar',
+                    data:{'gid':gid,'num':newVal},
+                    success:function (data) {
+                        document.getElementById('money').value=data
+                    }
+			    })
+		});
+
+		$('.value-minus').on('click', function () {
+			var divUpd = $(this).parent().find('.value'),
+				newVal = parseInt(divUpd.text(), 10) - 1;
+			if (newVal >= 1) divUpd.text(newVal);
+            var gid = $(this).parent().attr('id');
+			$.ajax({
+                type:'post',
+                url:'/gxcar',
+                data:{'gid':gid,'num':newVal},
+                success:function (data) {
+                    document.getElementById('money').value=data
+                }
+            })
+		});
+
+
+	</script>
+	<!--quantity-->
+
+    <script type="text/javascript">
+        function xichu(id) {
+            $.ajax({
+                type:'post',
+                url:'/delfcar',
+                data:{'id':id},
+                success:function (data) {
+                        rem=document.getElementById(id);
+                        rem.remove();
+                        document.getElementById('money').value=data
+                }
+            })
+        }
+    </script>
+
+	<!-- smoothscroll -->
+	<script src="/static/js/SmoothScroll.min.js"></script>
+	<!-- //smoothscroll -->
+
+	<!-- start-smooth-scrolling -->
+	<script src="/static/js/move-top.js"></script>
+	<script src="/static/js/easing.js"></script>
+	<script>
+		jQuery(document).ready(function ($) {
+			$(".scroll").click(function (event) {
+				event.preventDefault();
+
+				$('html,body').animate({
+					scrollTop: $(this.hash).offset().top
+				}, 1000);
+			});
+		});
+	</script>
+	<!-- //end-smooth-scrolling -->
+
+	<!-- smooth-scrolling-of-move-up -->
+	<script>
+		$(document).ready(function () {
+			/*
+			var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear'
+			};
+			*/
+			$().UItoTop({
+				easingType: 'easeOutQuart'
+			});
+
+		});
+	</script>
+	<!-- //smooth-scrolling-of-move-up -->
+
+	<!-- for bootstrap working -->
+	<script src="/static/js/bootstrap.js"></script>
+	<!-- //for bootstrap working -->
+	<!-- //js-files -->
+{% endblock %}
+</body>
+
+</html>

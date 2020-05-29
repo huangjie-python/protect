@@ -1,0 +1,110 @@
+{% extends 'news/index.html' %}
+{% load static %}
+{% block mainslder %}
+			
+			<div class="plr-50 h-600x h-md-800x h-xs-1000x oflow-hidden">
+
+			<div class="w-60 w-md-100 float-left float-md-none h-100 h-md-40 h-xs-50">
+			    {% for hot_new in home.hot_new1s %}
+				<div class="w-50 w-xs-100 float-left float-xs-none pos-relative h-100 h-xs-50">
+					<!-- Image as bg-1 -->
+					<div class="img-bg bg-1 bg-grad-layer-6">
+                        <img src="{% static  hot_new.img  %}">
+                    </div>
+
+					<div class="abs-blr color-white p-20">
+						<h3 class="mb-10 mb-sm-5 t-upper">
+							<a class="hover-grey" href="{% url 'single_post' hot_new.id %}"><b>{{ hot_new.name }}</b></a></h3>
+						<ul class="list-li-mr-10 color-grey">
+							<li><i class="mr-5 font-12 ion-clock"></i>{{ hot_new.time }}</li>
+							<li><i class="mr-5 font-12 ion-android-person"></i>{{ hot_new.author }}</li>
+							<li><i class="mr-5 font-12 ion-ios-chatbubble-outline"></i>{{ hot_new.comment_num }}</li>
+							<li><i class="mr-5 font-12 ion-eye"></i>{{ hot_new.read_num }}</li>
+						</ul>
+					</div><!--abs-blr -->
+				</div><!-- w-50 -->
+                {% endfor %}
+
+			</div><!-- w-60 -->
+			<div class="w-40 w-md-100 float-left float-md-none h-100 h-md-60 h-xs-50">
+			    {% for hot_new in home.hot_new2s %}
+				<div class="h-50 pb-5 pt-md-10">
+					<div class="h-100 pos-relative">
+						<!-- Image as bg-3 -->
+						<div class="img-bg bg-3 bg-grad-layer-6">
+                            <img src="{% static hot_new.img %}">
+                        </div>
+
+						<div class="abs-blr color-white p-20">
+							<h3 class="mb-10 mb-sm-5 t-upper">
+								<a class="hover-grey" href="{% url 'single_post' hot_new.id %}"><b>{{ hot_new.name }}</b></a></h3>
+							<ul class="list-li-mr-10 color-ash">
+								<li><i class="mr-5 font-12 ion-clock"></i>{{ hot_new.time }}</li>
+								<li><i class="mr-5 font-12 ion-android-person"></i>{{ hot_new.author }}</li>
+								<li><i class="mr-5 font-12 ion-ios-chatbubble-outline"></i>{{ hot_new.comment_num }}</li>
+								<li><i class="mr-5 font-12 ion-eye"></i>{{ hot_new.read_num }}</li>
+							</ul>
+						</div><!--abs-blr -->
+					</div><!-- h-50 -->
+				</div><!-- h-50 -->
+				{% endfor %}
+			</div><!-- w-40 -->
+		</div><!-- wrapper -->
+	</section>
+	<!-- END OF MAIN SLIDER -->
+	
+
+	<section class="ptb-30">
+		<div class="container">
+			<div class="row">
+			
+				<div class="col-md-12 col-lg-8">
+					
+					<div class="ptb-0">
+						<a class="mt-10" href="#"><i class="mr-5 ion-ios-home"></i><b>首页</b></a>
+						<a class="mt-10 color-ash" href="#"><i class="mlr-10 ion-chevron-right"></i><b>{{ home.newtype }}</b></a>
+						<h1 class="mtb-20"><b>{{ newtype }}</b></h1>
+						<p class="mb-30">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur placerat tincidunt mauris semper lorem, 
+							in dignissim ex metus a lacus. 
+							Sed venenatis dolor vitae vehicula varius. Aliquam vitae donis lobortis diamet</p>
+					</div>
+                    {% if home.news %}
+                    {% for new in home.news %}
+					<div class="mb-30 sided-250x s-lg-height card-view">
+						<div class="s-left">
+							<img src="{% static new.img %}" alt="">
+						</div><!-- left-area -->
+						<div class="s-right ptb-30 pt-sm-20 pb-xs-5 plr-30 plr-xs-0">
+							<h4><a href="#">{{ new.name }}</a></h4>
+							<ul class="mtb-10 list-li-mr-20 color-lite-black">
+								<li><i class="mr-5 font-12 ion-clock"></i>{{ new.time }}</li>
+								<li><i class="mr-5 font-12 ion-android-person"></i>{{ new.author }}</li>
+								<li><i class="mr-5 font-12 ion-ios-chatbubble-outline"></i>{{ new.comment_num }}</li>
+								<li><i class="mr-5 font-12 ion-eye"></i>{{ new.read_num }}</li>
+							</ul>
+							<p class="mt-10">{{ new.name }}</p>
+						</div><!-- right-area -->
+					</div><!-- sided-250x -->
+                    {% endfor %}
+					<ul class="pagination mb-30">
+                        {% for i in home.page_num_list %}
+                            {% if i == home.page %}
+						<li class="active"><a href="{% url 'categories' home.newtype i %}">{{ i }}</a></li>
+						    {% else %}
+                        <li ><a href="{% url 'categories' home.newtype i %}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if home.page == home.page_num %}
+                        {% else %}
+						<li><a href="{% url 'categories' home.newtype home.page|add:1 %}"><i class="ion-chevron-right"></i></a></li>
+                        {% endif %}
+					</ul>
+                    {% else %}
+                    <h1>搜索无结果！</h1>
+                    {% endif %}
+
+					
+				</div><!-- col-sm-8 -->
+
+{% endblock mainslder %}
+

@@ -1,0 +1,114 @@
+{% extends 'news/index.html' %}
+{% load static %}
+{% block mainslder %}
+
+
+	<section class="ptb-30">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-md-12 col-lg-8">
+
+					<div class="ptb-0">
+						<a class="mt-10" href=""><i class="mr-5 ion-ios-home"></i><b>HOME</b></a>
+						<a class="mt-10" href=""><i class="mlr-10 ion-chevron-right"></i><b>SPORT</b></a>
+						<a class="mt-10 mb-30 color-ash" href=""><i class="mlr-10 ion-chevron-right"></i>
+							<b>BAHRAIN GRAND PRIX : WILL SEBASTIAN VETTEL REGIN IN THE HEART OF THE DESERT?</b></a>
+					</div>
+
+					<div class="p-30 mb-30 card-view">
+						<img src="{% static home.new.img %}" alt="">
+						<h3 class="mt-30 mb-5"><a href="#"><b>{{ home.new.name }}</b></a></h3>
+						<ul class="list-li-mr-10 color-lite-black">
+							<li><i class="mr-5 font-12 ion-clock"></i>{{ home.new.time }}</li>
+							<li><i class="mr-5 font-12 ion-android-person"></i>{{ home.new.author }}</li>
+							<li><i class="mr-5 font-12 ion-ios-chatbubble-outline"></i>{{ home.new.read_num }}</li>
+							<li><i class="mr-5 font-12 ion-eye"></i>{{ home.new.comment_num }}</li>
+						</ul>
+                        {% autoescape off %}
+						<p class="mt-30">{{ home.new.content }}
+						</p>
+                        {% endautoescape %}
+					</div><!-- card-view -->
+
+					<div class="p-30 mb-30 card-view">
+						<div class="sided-90x">
+							<div class="s-left br-3 oflow-hidden">
+								<img src="{% static home.new.author.img %}" alt="">
+							</div><!-- s-left -->
+
+							<div class="s-right">
+								<h4><b>{{ home.new.author }}</b></h4>
+								<p class="mt-5">{{ home.new.author.introduction }}
+								</p>
+							</div><!-- s-left -->
+						</div><!-- sided-90x -->
+					</div><!-- card-view -->
+
+
+
+					<div class="p-30 mb-30 card-view">
+						<h4 class="p-title"><b>用户评论</b></h4>
+                        {% for comment in home.comments %}
+						<div class="sided-90x">
+							<div class="s-left br-3 oflow-hidden">
+								<img src="{% static comment.user.img %}" alt="">
+							</div><!-- s-left -->
+
+							<div class="s-right">
+								<h5><b>{{ comment.user.name }}</b><span class="ml-10 color-ash font-8"> {{ comment.time }}</span></h5>
+								<p class="mt-5 mb-10">{{ comment.content }}
+								</p>
+							</div><!-- s-left -->
+						</div><!-- sided-90x -->
+                        {% endfor %}
+
+					</div><!-- card-view -->
+
+
+					<div class="p-30 mb-30 card-view">
+						<h4 class="p-title"><b>发表你的评论</b></h4>
+							<div class="row">
+								<div class="col-sm-12">
+									<textarea class="mb-30" style="width: 650px ;height: 140px" name="comment" id="comment" placeholder="Your comment"></textarea>
+								</div><!-- col-sm-12 -->
+
+							</div><!-- row -->
+							<button class="btn-fill-primary plr-20"  onclick="comment_check()"><b>评论</b></button>
+					</div><!-- card-view -->
+
+				</div><!-- col-sm-8 -->
+
+
+
+<script type="text/javascript">
+
+
+    function comment_check() {
+        comment = document.getElementById('comment').value;
+        if(comment == ''){
+            alert('评论不能为空！')
+        }
+        else {
+            $.ajax({
+                type:'post',
+                url: '{% url 'comment' %}',
+                data: {'comment':comment,
+                        'new' : {{ home.new.id }},
+                        csrfmiddlewaretoken:'{{ csrf_token }}'
+                       },
+                success:function (data) {
+                    if(data['check'] == 'no'){
+                    alert('请登录后评论！')
+                    }
+                    else if(data['check'] == 'yes'){
+                        alert('评论成功！')
+                    }
+            }
+        })
+    }}
+
+
+
+</script>
+{% endblock mainslder %}

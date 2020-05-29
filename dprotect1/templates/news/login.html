@@ -1,0 +1,84 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>登录</title>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css'%}">
+
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/vector.js' %}"></script>
+
+</head>
+<body>
+{% block login %}
+<div id="container">
+	<div id="output">
+		<div class="containerT">
+			<h1>用户登录</h1>
+			<form class="form" name="form" id="form" action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+				<input type="text" placeholder="用户名" id="user_name" name="user_name">
+				<input type="password" placeholder="密码" id="user_password">
+				<button type="button" id="login" onclick="login_check()">登录</button>
+				<div id="prompt" class="prompt"></div>
+			</form>
+            <h1>如果你还没注册请先注册！</h1>
+            <form class="form">
+                <a href="{% url 'register' %}"><button type="button" id="register">注册</button></a>
+            </form>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+    $.ajaxSetup({
+        data:{csrfmiddlewaretoken:'{{ csrf_token }}'}
+    });
+
+
+    function login_check() {
+        uname = document.getElementById('user_name').value;
+        upwd = document.getElementById('user_password').value;
+        $.ajax({
+            type:'post',
+            url: '{% url 'login_check' %}',
+            data:{'name':uname,
+                  'pwd' :upwd
+            },
+            success:function (data) {
+                if(data['check'] == 'no1'){
+                    alert('用户名不存在请重新输入！')
+                }
+                else if(data['check'] == 'no2'){
+                    alert('密码错误请重新输入！')
+                }
+                else {
+                    document.form.submit()
+                }
+            }
+        })
+    }
+
+
+</script>
+{% endblock %}
+<script type="text/javascript">
+    $(function(){
+        Victor("container", "output");   //登录背景函数
+        $("#entry_name").focus();
+        $(document).keydown(function(event){
+            if(event.keyCode==13){
+                $("#entry_btn").click();
+            }
+        });
+    });
+</script>
+<div style="text-align:center;">
+</div>
+</body>
+</html>

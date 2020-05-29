@@ -1,0 +1,166 @@
+{% extends 'houtai/index.html' %}
+{% block name4 %}
+    <div class="container tm-mt-big tm-mb-big">
+      <div class="row">
+        <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+          <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+            <div class="row">
+              <div class="col-12">
+                <h2 class="tm-block-title d-inline-block">增加商品</h2>
+              </div>
+            </div>
+            <div class="row tm-edit-product-row">
+              <div class="col-xl-6 col-lg-6 col-md-12">
+                <form action="/houtai/add_product" class="tm-edit-product-form" method="post" enctype="multipart/form-data">
+                  <div class="form-group mb-3">
+                    <label
+                      for="gname"
+                      >商品名
+                    </label>
+                    <input
+                      id="gname"
+                      name="gname"
+                      type="text"
+                      class="form-control validate"
+                      required
+                    />
+                  </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="gms"
+                      >商品描述</label
+                    >
+                    <textarea
+                      class="form-control validate"
+                      name="gms"
+                      id="gms"
+                      rows="3"
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="glx"
+                      >商品类型</label
+                    >
+                    <select
+                      class="custom-select tm-select-accounts"
+                      id="glx"
+                      name="glx"
+                    >
+                      <option selected>选择类型</option>
+                      {% for lx in a.goodlx %}
+                      <option value="{{ lx.lname }}">{{ lx.lname }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="row">
+                      <div class="form-group mb-3 col-xs-12 col-sm-6">
+                          <label
+                            for="gjg"
+                            >商品价格
+                          </label>
+                          <input
+                            id="gjg"
+                            name="gjg"
+                            type="text"
+                            class="form-control validate"
+                            data-large-mode="true"
+                          />
+                        </div>
+                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                          <label
+                            for="gsl"
+                            >商品数量
+                          </label>
+                          <input
+                            id="gsl"
+                            name="gsl"
+                            type="text"
+                            class="form-control validate"
+                            required
+                          />
+                        </div>
+                      <div class="form-group mb-3 col-xs-12 col-sm-6">
+                          <label
+                            for="gri"
+                            >生产日期
+                          </label>
+                          <input
+                            id="gri"
+                            name="gri"
+                            type="text"
+                            class="form-control validate"
+                            data-large-mode="true"
+                          />
+                        </div>
+                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                          <label
+                            for="gbz"
+                            >商品保质期
+                          </label>
+                          <input
+                            id="gbz"
+                            name="gbz"
+                            type="text"
+                            class="form-control validate"
+                            required
+                          />
+                        </div>
+                  </div>
+                  
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+                <div class="tm-product-img-dummy mx-auto">
+
+                    <input type="file"  style="display:none" id="uploadfile" name="uploadfile" accept="image/*"/>
+                    <img width="330px" height="240px"  src="/static/images/houtai/sctp.jpg" id="image" >
+
+                </div>
+              <br>
+              <br>
+                                <br>
+              <br>
+                                <br>
+              <br>
+                                <br>
+              <br>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Product Now</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/static/js/houtai/jquery-3.3.1.min.js"></script>
+       <script>
+      $(function() {
+        $("#expire_date").datepicker();
+      });
+    </script>
+<script>
+        $(function(){
+            $("#image").click(function(){
+        $("#uploadfile").click();
+        })
+        $("#uploadfile").change(function(){
+
+            var files=$(this)[0].files[0];    //获取文件信息
+            if(files)
+            {
+                var reader=new FileReader();  //调用FileReader
+                reader.onload=function(evt){   //读取操作完成时触发。
+                    $("#image").attr('src',evt.target.result)  //将img标签的src绑定为DataURL
+                }
+            reader.readAsDataURL(files); //将文件读取为 DataURL(base64)
+            }
+            else{
+                alert("上传失败");
+            }
+        })
+        })
+    </script>
+
+{% endblock %}

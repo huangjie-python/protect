@@ -1,0 +1,78 @@
+﻿{% extends 'news/login.html' %}
+{% block login %}
+<div id="container">
+	<div id="output">
+		<div class="containerT">
+			<h1>用户注册</h1>
+			<form class="form" name="form" id="form" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+				用户名：  <input type="text" placeholder="用户名" name="user_name" id="user_name">
+				密码：    <input type="password" placeholder="密码" name="user_password" id="user_password">
+				年龄：    <input type="text" placeholder="年龄" name="user_age" id="user_age">
+				出生日期：<input type="date" placeholder="生日" name="user_birthday" id="user_birthday">
+				性别：    <input type="text" placeholder="性别" name="user_gender" id="user_gender">
+				头像：    <input type="file"  name="user_img" id="user_img">
+				介绍：    <input type="text" placeholder="个人介绍" name="user_introduction" id="user_introduction">
+				<button type="button" id="entry_btn" onclick="register_check()">注册</button>
+			</form>
+            <h1>如果你已经注册请去登录！</h1>
+            <form class="form">
+                <a href="{% url 'login' %}"><button type="button" id="login">登录</button></a>
+            </form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+    $.ajaxSetup({
+            data:{csrfmiddlewaretoken:'{{ csrf_token }}'}
+        });
+
+
+    function register_check() {
+        var name = document.getElementById('user_name').value;
+        var password = document.getElementById('user_password').value;
+        var age = document.getElementById('user_age').value;
+        var birthday = document.getElementById('user_birthday').value;
+        var gender = document.getElementById('user_gender').value;
+        var img = document.getElementById('user_img').value;
+        var introduction = document.getElementById('user_introduction').value;
+        if (name == ''){
+            alert('用户名不能为空！');
+        }
+        else if (password == ''){
+            alert('密码不能为空！');
+        }
+        else if (age == ''){
+            alert('年龄不能为空！');
+        }
+        else if (birthday == ''){
+            alert('出生日期不能为空！');
+        }
+        else if (gender == ''){
+            alert('性别不能为空！');
+        }
+        else if (img == ''){
+            alert('头像不能为空！');
+        }
+        else if (introduction == ''){
+            alert('介绍不能为空！');
+        }
+        else{
+            $.ajax({
+                type: 'post',
+                url: '{% url 'register_check' %}',
+                data: {'name':name},
+                success:function (data) {
+                    if (data['check'] == 'no'){
+                        alert('你输入的用户名已存在，请重新输入！');
+                        name='';
+                        return False
+                    }
+                    else {
+                        document.form.submit()
+                    }
+                }
+            })
+    }}
+</script>
+{% endblock %}
